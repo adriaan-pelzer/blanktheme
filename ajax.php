@@ -1,5 +1,16 @@
 <?php
-$wp_config = file_get_contents ("../../../wp-config.php");
+function return_json ($json) {
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+    header('Content-type: application/json');
+    echo json_encode ($json, JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP);
+    die();
+}
+
+if (!($wp_config = file_get_contents ("../../../wp-config.php"))) {
+    $error = "Cannot read wp-config.php";
+    json_decode (array ('code'=>-1, 'error'=>$error));
+}
 
 $db_name = array();
 $db_host = array();
@@ -7,12 +18,40 @@ $db_user = array();
 $db_pass = array();
 $db_pref = array();
 
-preg_match ("/.*DB_NAME\', \'(.*)\'.*/", $wp_config, $db_name);
-preg_match ("/.*DB_HOST\', \'(.*)\'.*/", $wp_config, $db_host);
-preg_match ("/.*DB_USER\', \'(.*)\'.*/", $wp_config, $db_user);
-preg_match ("/.*DB_PASSWORD\', \'(.*)\'.*/", $wp_config, $db_pass);
-preg_match ("/.*table_prefix[^\']+\'([^\']+)\'.*/", $wp_config, $db_pref);
+if (!(preg_match ("/.*DB_NAME\', \'(.*)\'.*/", $wp_config, $db_name))) {
+    $error = "Cannot find DB_NAME";
+    json_decode (array ('code'=>-1, 'error'=>$error));
+}
 
-$mysql = mysql_connect ($db_host[1], $db_user[1], $db_pass[1]);
-mysql_select_db ($db_name[1], $mysql);
+if (!(preg_match ("/.*DB_HOST\', \'(.*)\'.*/", $wp_config, $db_host))) {
+    $error = "Cannot find DB_HOST";
+    json_decode (array ('code'=>-1, 'error'=>$error));
+}
+
+if (!(preg_match ("/.*DB_USER\', \'(.*)\'.*/", $wp_config, $db_user))) {
+    $error = "Cannot find DB_USER";
+    json_decode (array ('code'=>-1, 'error'=>$error));
+}
+
+if (!(preg_match ("/.*DB_PASSWORD\', \'(.*)\'.*/", $wp_config, $db_pass))) {
+    $error = "Cannot find DB_PASSWORD";
+    json_decode (array ('code'=>-1, 'error'=>$error));
+}
+
+if (!(preg_match ("/.*table_prefix[^\']+\'([^\']+)\'.*/", $wp_config, $db_pref))) {
+    $error = "Cannot find table_prefix";
+    json_decode (array ('code'=>-1, 'error'=>$error));
+}
+
+if (!($mysql = mysql_connect ($db_host[1], $db_user[1], $db_pass[1]))) {
+    $error = "Cannot connect to database: ".mysql_error ();
+    json_decode (array ('code'=>-1, 'error'=>$error));
+}
+
+if (!(mysql_select_db ($db_name[1], $mysql))) {
+    $error = "Cannot select database: ".mysql_error ();
+    json_decode (array ('code'=>-1, 'error'=>$error));
+}
+
+json_decode (array ('code'=>-1, 'error'=>'Unimplemented'));
 ?>
