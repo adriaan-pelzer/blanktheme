@@ -59,6 +59,17 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+/* make links without href also blue with pointer */
+a {
+    text-decoration: underline;
+    color: #0000ff;
+    cursor: pointer;
+}
+
+a:visited {
+    color: #551A8B;
+}
 /* /CSS reset */
 
 
