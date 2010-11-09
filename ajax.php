@@ -3,7 +3,7 @@ function return_json ($json) {
     header('Cache-Control: no-cache, must-revalidate');
     header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
     header('Content-type: application/json');
-    echo json_encode ($json, JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP);
+    echo json_encode ($json);
     die();
 }
 
