@@ -7,23 +7,15 @@ function browser_specific_stylesheet(){
 
     switch ($browser->getBrowser()) {
     case Browser::BROWSER_OPERA:
-        if ($browser->getVersion() >= 10) {
-            $stylesheet = 'style_op10.css';
-        }
+        $stylesheet = 'style_op11.css';
         break;
     case Browser::BROWSER_FIREFOX:
         if ($browser->getVersion() >= 4) {
             $stylesheet = 'style_ff4.css';
         } else if ($browser->getVersion() >= 3.6) {
             $stylesheet = 'style_ff36.css';
-        } else if ($browser->getVersion() >= 3.5) {
-            $stylesheet = 'style_ff36.css';
-        } else if ($browser->getVersion() >= 3.0) {
-            $stylesheet = 'style_ff30.css';
-        } else if ($browser->getVersion() >= 3) {
-            $stylesheet = 'style_ff2.css';
         } else {
-            $found = FALSE;
+            $stylesheet = 'style_ff35.css';
         }
         break;
     case Browser::BROWSER_IE:
@@ -31,39 +23,30 @@ function browser_specific_stylesheet(){
             $stylesheet = 'style_ie9.css';
         } else if ($browser->getVersion() >= 8) {
             $stylesheet = 'style_ie8.css';
-        } else if ($browser->getVersion() >= 7) {
-            $stylesheet = 'style_ie7.css';
-        } else if ($browser->getVersion() >= 6) {
-            $stylesheet = 'style_ie6.css';
         } else {
-            $found = FALSE;
+            $stylesheet = 'style_ie7.css';
         }
         break;
     case Browser::BROWSER_SAFARI:
-        if ($browser->getVersion() >= 5) {
-            $stylesheet = 'style_sf5.css';
-        } else {
-            $found = FALSE;
-        }
+        $stylesheet = 'style_sf5.css';
         break;
     case Browser::BROWSER_CHROME:
-        if ($browser->getVersion() >= 8) {
-            $stylesheet = 'style_ch8.css';
-        } else if ($browser->getVersion() >= 7) {
-            $stylesheet = 'style_ch7.css';
-        } else if ($browser->getVersion() >= 6) {
-            $stylesheet = 'style_ch6.css';
+        if ($browser->getVersion() >= 13) {
+            $stylesheet = 'style_ch13.css';
+        } else if ($browser->getVersion() >= 12) {
+            $stylesheet = 'style_ch12.css';
+        } else if ($browser->getVersion() >= 11) {
+            $stylesheet = 'style_ch11.css';
         } else {
-            $found = FALSE;
+            $stylesheet = 'style_ch10.css';
         }
         break;
     default:
-        $found = FALSE;
         break;
     }
 
     if ($stylesheet) {
-        return '<link rel="stylesheet" href="'.get_bloginfo ('template_url').'/'.$stylesheet.'" />';
+        return '<link rel="stylesheet" href="'.get_bloginfo ('template_url').'/'.$stylesheet.'?ver=1.0" />';
     } else {
         return '<!-- '.$browser->getUserAgent().' -->';
     }
